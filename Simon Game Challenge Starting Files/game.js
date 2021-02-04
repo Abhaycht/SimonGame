@@ -20,6 +20,7 @@ function playSound(name) {
   audio.play();
 }
 
+//function to check the answer
 function checkAnswer(currentLevel){
   if(gamePattern[currentLevel]==userClickedPattern[currentLevel])
   {
@@ -35,12 +36,30 @@ function checkAnswer(currentLevel){
   }
     else{
       console.log("fail");
+      $('h1').text("You lost,Press A key to reset");
+      var over = new Audio("sounds/wrong.mp3");
+      over.play();
+      $('body')
+      .addClass('game-over')
+      .delay(200)
+      .queue(function(next){
+        $(this).removeClass('game-over');
+        next();
+      });
+      startOver();
     }
+
+}
+
+function startOver(){
+    level=0;
+    gamePattern=[];
 
 }
 
 //function to chosen random button
 function nextSequence() {
+
   userClickedPattern=[];
   var randomNumber = Math.floor(Math.random() * (4 - 0));
   var randomChosenColor = buttonColor[randomNumber];
@@ -57,7 +76,7 @@ $(".btn").on('click', function() {
   userClickedPattern.push(userChosenColor);
   playSound(userChosenColor);
   animatePress(userChosenColor);
-  checkAnswer(level);
+  checkAnswer(userClickedPattern.length-1);
 
 });
 
